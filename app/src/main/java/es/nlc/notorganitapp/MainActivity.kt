@@ -8,7 +8,12 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.google.android.material.navigation.NavigationView
+import es.nlc.notorganitapp.Fragments.CategoriesFragment
+import es.nlc.notorganitapp.Fragments.GeneralFragment
+import es.nlc.notorganitapp.Fragments.PrincipalFragment
 import es.nlc.notorganitapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -56,15 +61,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         return when(item.itemId){
             R.id.nav_categories -> {
-                Toast.makeText(this, "categories", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<CategoriesFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
                 true
             }
             R.id.nav_general -> {
-                Toast.makeText(this, "general", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<GeneralFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
                 true
             }
             R.id.nav_principal -> {
-                Toast.makeText(this, "principal", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<PrincipalFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
                 true
             }
             R.id.nav_config -> {
