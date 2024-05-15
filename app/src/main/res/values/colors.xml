@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ConfigBack">#ABD996</color>
+    <color name="Obscur">#1B4001</color>
+    <color name="Mig">#9BBF65</color>
+    <color name="Filtres">#D7F8D7</color>
+    <color name="Notes">#EBF2B3</color>
+    <color name="NotesBar">#65A603</color>
+    <color name="MenúObscur">#3F5938</color>
+    <color name="FondoObscur">#242424</color>
 </resources>
