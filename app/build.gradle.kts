@@ -43,6 +43,14 @@ dependencies {
 
     // Natalia
     implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation ("org.mongodb:mongodb-driver-sync:4.3.4")
+    implementation ("org.mongodb:mongodb-driver-async:3.12.10")
+    implementation ("org.mongodb:mongodb-driver-reactivestreams:4.4.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.5.2")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
