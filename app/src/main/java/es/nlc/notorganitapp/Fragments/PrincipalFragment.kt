@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import es.nlc.notorganitapp.Adapters.CategoriesAdapter
 import es.nlc.notorganitapp.Adapters.NotesAdapter
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
+import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentPrincipalBinding
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +26,8 @@ class PrincipalFragment : Fragment() {
     private lateinit var binding: FragmentPrincipalBinding
     private lateinit var notesAdapter: NotesAdapter
     private val notesList: MutableList<Notes> = mutableListOf()
+    private lateinit var categoriesAdapter: CategoriesAdapter
+    private val categoriesList: MutableList<Categories> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +41,7 @@ class PrincipalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         fetchNotesFromDatabase()
+        fetchCategoriesFromDatabase()
     }
 
     private fun setupRecyclerView() {
@@ -47,6 +52,14 @@ class PrincipalFragment : Fragment() {
             layoutManager = GridLayoutManager(context, 2)
             adapter = notesAdapter
         }
+
+        categoriesAdapter = CategoriesAdapter(requireContext(), categoriesList) { cate ->
+            Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
+        }
+        binding.categoriesRecyclerView.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = categoriesAdapter
+        }
     }
 
     private fun fetchNotesFromDatabase() {
@@ -55,6 +68,16 @@ class PrincipalFragment : Fragment() {
             println("Result from findMany: $result")
             result?.let {
                 parseNotesResult(it)
+            }
+        }
+    }
+
+    private fun fetchCategoriesFromDatabase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = MongoDBDataAPIClient.findMany("Categoria", "Categories", "Cluster0")
+            println("Result from findMany: $result")
+            result?.let {
+                parseCategoriesResult(it)
             }
         }
     }
@@ -74,6 +97,27 @@ class PrincipalFragment : Fragment() {
                 }
                 println("Total notes: ${notesList.size}")
                 notesAdapter.notifyDataSetChanged()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    private suspend fun parseCategoriesResult(result: String) {
+        withContext(Dispatchers.Main) {
+            try {
+                val jsonObject = JSONObject(result)
+                val documentsArray: JSONArray = jsonObject.getJSONArray("documents")
+                println("HOLAAAAAAAAAAA $documentsArray")
+                for (i in 0 until documentsArray.length()) {
+                    val document = documentsArray.getJSONObject(i)
+                    val nom = document.getString("Nom")
+                    val color = document.getString("Color")
+                    categoriesList.add(Categories(nom, color))
+                }
+                println("Total notes: ${categoriesList.size}")
+                categoriesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
