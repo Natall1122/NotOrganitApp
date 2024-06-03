@@ -31,7 +31,7 @@ class CateAdapter(private val context: Context?,
 
 
     class CategoriesViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val nom: TextView = view.findViewById(R.id.cat)
+        private val nom: TextView = view.findViewById(R.id.NomCate)
         //private val color: TextView = view.findViewById(R.id.tint)
 
         fun bindItem(e: Categories){

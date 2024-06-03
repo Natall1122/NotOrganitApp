@@ -1,4 +1,4 @@
-package es.nlc.notorganitapp.Fragments
+package es.nlc.notorganitapp.fragments
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat

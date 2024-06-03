@@ -1,7 +1,6 @@
 package es.nlc.notorganitapp
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,22 +10,18 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
-import es.nlc.notorganitapp.Fragments.CategoriesFragment
-import es.nlc.notorganitapp.Fragments.GeneralFragment
-import es.nlc.notorganitapp.Fragments.PrincipalFragment
-import es.nlc.notorganitapp.Mongo.DatabaseOperations
+import es.nlc.notorganitapp.fragments.CategoriesFragment
+import es.nlc.notorganitapp.fragments.GeneralFragment
+import es.nlc.notorganitapp.fragments.PrincipalFragment
 import es.nlc.notorganitapp.databinding.ActivityMainBinding
-import es.nlc.notorganitapp.Mongo.MongoDBClient
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.bson.Document
-import org.json.JSONObject
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
-    // private lateinit var databaseOperations: DatabaseOperations
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,25 +33,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         setUpNavigationDrawer()
-
-        lifecycleScope.launch {
-           /* val newDocument = JSONObject()
-            newDocument.put("titol", "UEEEEEEEEEEE")
-            newDocument.put("text", "FUNCIONA")
-            val insertOneResult = MongoDBDataAPIClient.insertOne("Altres", "Categories", "Cluster0", newDocument.toString())
-            println("Insert One Result: $insertOneResult")
-*/
-            val result = MongoDBDataAPIClient.findOne("Receptes", "Categories", "Cluster0")
-            if (result != null) {
-                println("Data: $result")
-                Toast.makeText(this@MainActivity, "Holaaa", Toast.LENGTH_SHORT).show()
-            } else {
-                println("Failed to fetch data")
-            }
-        }
-
-
-
     }
 
     @SuppressLint("MissingSuperCall")
@@ -84,7 +60,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        //Close the navigation drawer
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
         return when(item.itemId){
@@ -119,6 +94,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             else -> false
+        }
+    }
+
+
+    override fun onAddCategory() {
+        Toast.makeText(this, "HOLAAA", Toast.LENGTH_SHORT).show()
+        CoroutineScope(Dispatchers.IO).launch {
+            val document = """
+            {
+                "nom": "Exemple",
+                "color": "Blau"
+            }
+        """.trimIndent()
+
+            val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
+            println("InsertOne result: $result")
         }
     }
 
