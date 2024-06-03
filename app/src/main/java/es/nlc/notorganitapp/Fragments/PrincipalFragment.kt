@@ -57,9 +57,10 @@ class PrincipalFragment : Fragment() {
             Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
         }
         binding.categoriesRecyclerView.apply {
-            layoutManager = GridLayoutManager(context, 2)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = categoriesAdapter
         }
+
     }
 
     private fun fetchNotesFromDatabase() {
