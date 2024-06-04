@@ -1,5 +1,6 @@
 package es.nlc.notorganitapp.Mongo
 
+import android.util.Log
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -71,7 +72,12 @@ object MongoDBDataAPIClient {
             }
         """.trimIndent()
 
-        return makeRequest("insertOne", jsonBody)
+        return try {
+            makeRequest("insertOne", jsonBody)
+        } catch (e: Exception) {
+            Log.e("MongoDBDataAPIClient", "Error inserting document: ${e.message}")
+            null
+        }
     }
 
     suspend fun deleteOne(collection: String, database: String, dataSource: String, filter: String): String? {

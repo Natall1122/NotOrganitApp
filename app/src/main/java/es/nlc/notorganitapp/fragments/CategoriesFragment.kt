@@ -32,9 +32,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        Log.d("CategoriesFragment", "Layout inflated")
         binding.newCat.setOnClickListener(this)
-        Log.d("CategoriesFragment", "Listener set on NewCat button")
         setupRecyclerView()
         fetchCategoriesFromDatabase()
         return binding.root
@@ -96,8 +94,6 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when(v.id){
             R.id.new_cat -> {
-                Log.d("CategoriesFragment", "NewCat button clicked")
-                Toast.makeText(requireContext(), "Button clicked!", Toast.LENGTH_SHORT).show()
                 mListener?.onAddCategory()
             }
         }

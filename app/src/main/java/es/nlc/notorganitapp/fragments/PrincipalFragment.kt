@@ -1,5 +1,6 @@
 package es.nlc.notorganitapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import es.nlc.notorganitapp.Adapters.CategoriesAdapter
 import es.nlc.notorganitapp.Adapters.NotesAdapter
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
+import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentPrincipalBinding
@@ -21,9 +23,10 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
-class PrincipalFragment : Fragment() {
+class PrincipalFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentPrincipalBinding
     private lateinit var notesAdapter: NotesAdapter
+    private var mListener2: OnPrincipalClickedListener? = null
     private val notesList: MutableList<Notes> = mutableListOf()
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val categoriesList: MutableList<Categories> = mutableListOf()
@@ -33,6 +36,10 @@ class PrincipalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPrincipalBinding.inflate(inflater, container, false)
+        binding.linearCategories.setOnClickListener(this)
+        binding.linearNotes.setOnClickListener(this)
+
+
         setupRecyclerView()
         fetchNotesFromDatabase()
         fetchCategoriesFromDatabase()
@@ -112,5 +119,36 @@ class PrincipalFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if(context is OnPrincipalClickedListener){
+            mListener2 = context
+        }else{
+            throw Exception("The activity must implement the interface OnButtonsFragmentListener")
+        }
+    }
+
+    override fun onClick(v: View) {
+        when(v.id){
+            R.id.linearCategories -> {
+                mListener2?.onCategories()
+            }
+            R.id.linearNotes -> {
+                mListener2?.onNotes()
+            }
+        }
+    }
+    override fun onDetach() {
+        super.onDetach()
+        mListener2 = null
+    }
+
+    interface OnPrincipalClickedListener{
+        fun onCategories()
+        fun onNotes()
     }
 }

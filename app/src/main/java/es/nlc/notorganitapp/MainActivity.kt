@@ -10,19 +10,22 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
 import es.nlc.notorganitapp.fragments.CategoriesFragment
 import es.nlc.notorganitapp.fragments.GeneralFragment
 import es.nlc.notorganitapp.fragments.PrincipalFragment
 import es.nlc.notorganitapp.databinding.ActivityMainBinding
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
+import es.nlc.notorganitapp.clases.Categories
+import es.nlc.notorganitapp.dialogs.NovaCategoriaDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, CategoriesFragment.OnButtonsClickedListener {
+class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_NotOrganitApp)
@@ -97,19 +100,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-
     override fun onAddCategory() {
-        Toast.makeText(this, "HOLAAA", Toast.LENGTH_SHORT).show()
-        CoroutineScope(Dispatchers.IO).launch {
-            val document = """
-            {
-                "nom": "Exemple",
-                "color": "Blau"
-            }
-        """.trimIndent()
+        NovaCategoriaDialog().show(supportFragmentManager,"")
+    }
 
-            val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
-            println("InsertOne result: $result")
+    override fun onAddDialogClick(cat: Categories){
+        Toast.makeText(this, "HOLAAA", Toast.LENGTH_SHORT).show()
+        val document = """
+            {
+                "Nom": ${cat.nom}
+                "Color": ${cat.color}
+            }
+        """
+
+        lifecycleScope.launch(Dispatchers.IO){
+            try {
+                val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
+                println(result)
+            }catch (e: Exception){
+            }
+        }
+    }
+
+    override fun onCategories() {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<CategoriesFragment>(R.id.fragment_container)
+            addToBackStack(null)
+        }
+    }
+
+    override fun onNotes() {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace<GeneralFragment>(R.id.fragment_container)
+            addToBackStack(null)
         }
     }
 

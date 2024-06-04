@@ -28,15 +28,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/new_cat"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/nova"
         android:layout_marginTop="167dp"
         android:layout_marginEnd="48dp"
-        android:textSize="20dp"
-        android:text="+"
-        android:backgroundTint="@color/Mig"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
