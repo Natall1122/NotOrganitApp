@@ -6,7 +6,12 @@
         <item name="colorOnPrimary">@color/ConfigBack</item>
         <item name="colorSecondary">@color/grisC</item>
 
+        <item name="navigationViewStyle">@style/NavigationViewStyle</item>
         <item name="android:statusBarColor">@color/black</item>
+    </style>
+
+    <style name="NavigationViewStyle" parent="Widget.MaterialComponents.NavigationView">
+        <item name="android:background">@color/MenúObscur</item>
     </style>
 
     <style name="Theme.PreferenceScreen" parent="PreferenceThemeOverlay">
