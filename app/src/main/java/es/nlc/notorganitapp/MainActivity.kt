@@ -19,6 +19,7 @@ import es.nlc.notorganitapp.databinding.ActivityMainBinding
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.dialogs.NovaCategoriaDialog
+import es.nlc.notorganitapp.fragments.CategoriaConcretaFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,6 +135,19 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace<GeneralFragment>(R.id.fragment_container)
+            addToBackStack(null)
+        }
+    }
+
+    override fun onCategoriaClicked(categoryName: String) {
+        val fragment = CategoriaConcretaFragment().apply {
+            arguments = Bundle().apply {
+                putString("CATEGORY_NAME", categoryName)
+            }
+        }
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragment_container, fragment)
             addToBackStack(null)
         }
     }

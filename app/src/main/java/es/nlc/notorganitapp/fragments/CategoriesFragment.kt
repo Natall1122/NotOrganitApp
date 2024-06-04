@@ -41,7 +41,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
 
     private fun setupRecyclerView() {
         categoriesAdapter = CateAdapter(requireContext(), categoriesList) { cate ->
-            Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
+            mListener?.onCategoriaClicked(cate.nom)
         }
         binding.CateRec.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -105,6 +105,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
 
     interface OnButtonsClickedListener{
         fun onAddCategory()
+        fun onCategoriaClicked(categoryName: String)
     }
 
 

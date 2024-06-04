@@ -24,6 +24,7 @@
                 android:layout_margin="10dp"
                 android:padding="3dp"
                 android:text="TITOL:"
+                android:textColor="@color/Obscur"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 />
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:padding="3dp"
+                android:textColor="@color/Obscur"
                 android:text="Ací apareixeria el text:"
                 android:textSize="17dp"
                 tools:layout_editor_absoluteX="18dp"

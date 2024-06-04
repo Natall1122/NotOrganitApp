@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    android:background="@color/Mig"
+    android:background="?attr/colorPrimary"
     >
 
 
@@ -28,7 +28,7 @@
         android:text="NotOrganitzApp"
         android:textSize="23dp"
         android:textStyle="bold"
-        android:textColor="#395C24"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

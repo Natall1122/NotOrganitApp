@@ -67,7 +67,7 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
 
     private fun fetchNotesFromDatabase() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = MongoDBDataAPIClient.findMany("Receptes", "Categories", "Cluster0")
+            val result = MongoDBDataAPIClient.findMany("Notes", "Categories", "Cluster0")
             result?.let {
                 parseNotesResult(it)
             }
@@ -93,7 +93,8 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
                     val id = document.getString("_id")
                     val title = document.getString("titol")
                     val text = document.getString("text")
-                    notesList.add(Notes(id, title, text))
+                    val categoria = document.getString("categoria")
+                    notesList.add(Notes(id, title, text, categoria))
                 }
                 notesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {

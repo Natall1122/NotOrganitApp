@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#242424</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gris">#615F5F</color>
+    <color name="grisC">#DCDCDC</color>
     <color name="ConfigBack">#ABD996</color>
     <color name="Obscur">#1B4001</color>
     <color name="Mig">#9BBF65</color>
@@ -9,5 +11,4 @@
     <color name="Notes">#EBF2B3</color>
     <color name="NotesBar">#65A603</color>
     <color name="MenúObscur">#3F5938</color>
-    <color name="FondoObscur">#242424</color>
 </resources>

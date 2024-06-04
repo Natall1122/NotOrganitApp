@@ -62,6 +62,19 @@ object MongoDBDataAPIClient {
         return makeRequest("find", jsonBody)
     }
 
+    suspend fun findNotesByCategory(category: String, collection: String, database: String, dataSource: String): String? {
+        val jsonBody = """
+            {
+                "collection":"$collection",
+                "database":"$database",
+                "dataSource":"$dataSource",
+                "filter": {"categoria": "$category"}
+            }
+        """.trimIndent()
+
+        return makeRequest("find", jsonBody)
+    }
+
     suspend fun insertOne(collection: String, database: String, dataSource: String, document: String): String? {
         val jsonBody = """
             {

@@ -1,7 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.NotOrganitApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/MenúObscur</item>
+        <item name="colorPrimaryVariant">@color/Obscur</item>
+        <item name="colorOnPrimary">@color/ConfigBack</item>
+        <item name="colorSecondary">@color/grisC</item>
+
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+
+    <style name="Theme.PreferenceScreen" parent="PreferenceThemeOverlay">
+        <item name="android:background">@color/Obscur</item>
     </style>
 </resources>
