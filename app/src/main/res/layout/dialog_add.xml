@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="50dp"
-        android:layout_margin="15dp"
+        android:layout_margin="30dp"
         android:backgroundTint="@color/ConfigBack"
         >
 
@@ -39,6 +39,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textSize="20dp"
+            android:textColor="@color/Obscur"
+            android:textColorHint="@color/Obscur"
             android:layout_marginBottom="30dp"
             android:inputType="textPersonName"
             android:hint="nom de la categoria" />
@@ -49,6 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textSize="20dp"
+            android:textColor="@color/Obscur"
+            android:textColorHint="@color/Obscur"
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="color de la categoria" />
