@@ -141,5 +141,19 @@ object MongoDBDataAPIClient {
 
         return makeRequest("updateOne", jsonBody)
     }
+
+    suspend fun updateNotesCategoria(collection: String, database: String, dataSource: String, filter: String, update: String): String? {
+        val jsonBody = """
+            {
+                "collection":"$collection",
+                "database":"$database",
+                "dataSource":"$dataSource",
+                "filter": $filter,
+                "update": $update
+            }
+        """.trimIndent()
+
+        return makeRequest("updateMany", jsonBody)
+    }
 }
 

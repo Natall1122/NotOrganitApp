@@ -12,6 +12,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
+import es.nlc.notorganitapp.Adapters.CateAdapter
 import es.nlc.notorganitapp.fragments.CategoriesFragment
 import es.nlc.notorganitapp.fragments.GeneralFragment
 import es.nlc.notorganitapp.fragments.PrincipalFragment
@@ -19,13 +20,17 @@ import es.nlc.notorganitapp.databinding.ActivityMainBinding
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.dialogs.NovaCategoriaDialog
+import es.nlc.notorganitapp.dialogs.UpdateCategoriaDialog
 import es.nlc.notorganitapp.fragments.CategoriaConcretaFragment
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
+class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var categoriesAdapter: CateAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_NotOrganitApp)
@@ -116,6 +121,7 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
         lifecycleScope.launch(Dispatchers.IO){
             try {
                 val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
+                categoriesAdapter.notifyDataSetChanged()
                 println(result)
             }catch (e: Exception){
                 println("ERROR: ${e}")
@@ -169,8 +175,21 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
 
     }
 
-    override fun onEditCategory(categoryName: String) {
-        TODO("Not yet implemented")
+    override fun onEditCategory(cate: Categories) {
+        UpdateCategoriaDialog(cate).show(supportFragmentManager,"")
+    }
+
+    override fun onUpdateDialogClick(cat: Categories, nomAntic: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val filter = """{"Nom": "${nomAntic}"}"""
+            val update = """{"${'$'}set": {"Nom": "${cat.nom}", "Color": "${cat.color}"}}"""
+
+            val filterNotes = """{"categoria": "${nomAntic}"}"""
+            val updateNotes = """{"${'$'}set": {"categoria": "${cat.nom}"}}"""
+
+            MongoDBDataAPIClient.updateOne("Categoria", "Categories", "Cluster0", filter, update)
+            MongoDBDataAPIClient.updateNotesCategoria("Notes", "Categories", "Cluster0", filterNotes, updateNotes)
+        }
     }
 
 }

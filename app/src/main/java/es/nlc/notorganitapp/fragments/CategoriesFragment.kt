@@ -14,6 +14,7 @@ import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.databinding.FragmentCategoriesBinding
+import es.nlc.notorganitapp.dialogs.UpdateCategoriaDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,7 +79,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
 
     private fun showOptionsPopup(cate: Categories, anchorView: View) {
         val inflater = LayoutInflater.from(context)
-        val popupView = inflater.inflate(R.layout.dialog_opcions, null)
+        val popupView = inflater.inflate(R.layout.opcions_carpetes, null)
 
         val deleteIcon = popupView.findViewById<ImageView>(R.id.delete_icon)
         val editIcon = popupView.findViewById<ImageView>(R.id.edit_icon)
@@ -91,7 +92,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
         }
 
         editIcon.setOnClickListener {
-            mListener?.onEditCategory(cate.nom)
+            mListener?.onEditCategory(cate)
             popupWindow.dismiss()
         }
 
@@ -107,6 +108,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
             throw Exception("The activity must implement the interface OnButtonsFragmentListener")
         }
     }
+
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -125,6 +127,6 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
         fun onAddCategory()
         fun onCategoriaClicked(categoryName: String)
         fun onDeleteCategory(categoryName: String)
-        fun onEditCategory(categoryName: String)
+        fun onEditCategory(cate: Categories)
     }
 }
