@@ -39,7 +39,7 @@ class NovaCategoriaDialog: DialogFragment() {
                     )
                     mListener.onAddDialogClick(cat)
                 }
-                .setNegativeButton("CANCEL"){dialog, id ->
+                .setNegativeButton("CANCEL·LAR"){dialog, id ->
 
                 }
             builder.create()

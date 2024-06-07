@@ -2,12 +2,12 @@ package es.nlc.notorganitapp.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.nlc.notorganitapp.Adapters.CateAdapter
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
@@ -38,19 +38,16 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-
     private fun setupRecyclerView() {
-        categoriesAdapter = CateAdapter(requireContext(), categoriesList) { cate ->
-            mListener?.onCategoriaClicked(cate.nom)
-        }
+        categoriesAdapter = CateAdapter(requireContext(), categoriesList,
+            { cate -> mListener?.onCategoriaClicked(cate.nom) },
+            { cate, view -> showOptionsPopup(cate, view) } // Afegeix aquest listener per mostrar el popup
+        )
         binding.CateRec.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = categoriesAdapter
         }
-
     }
-
-    //  PART EXTRACCIÓ I MOSTRAR DADES
 
     private fun fetchCategoriesFromDatabase() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -79,34 +76,55 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun showOptionsPopup(cate: Categories, anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.dialog_opcions, null)
 
-    // BOTONS
+        val deleteIcon = popupView.findViewById<ImageView>(R.id.delete_icon)
+        val editIcon = popupView.findViewById<ImageView>(R.id.edit_icon)
+
+        val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        deleteIcon.setOnClickListener {
+            mListener?.onDeleteCategory(cate.nom)
+            popupWindow.dismiss()
+        }
+
+        editIcon.setOnClickListener {
+            mListener?.onEditCategory(cate.nom)
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(anchorView, 0, 0)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if(context is OnButtonsClickedListener){
+        if (context is OnButtonsClickedListener) {
             mListener = context
-        }else{
+        } else {
             throw Exception("The activity must implement the interface OnButtonsFragmentListener")
         }
     }
 
     override fun onClick(v: View) {
-        when(v.id){
+        when (v.id) {
             R.id.new_cat -> {
                 mListener?.onAddCategory()
             }
         }
     }
+
     override fun onDetach() {
         super.onDetach()
         mListener = null
     }
 
-    interface OnButtonsClickedListener{
+    interface OnButtonsClickedListener {
         fun onAddCategory()
         fun onCategoriaClicked(categoryName: String)
+        fun onDeleteCategory(categoryName: String)
+        fun onEditCategory(categoryName: String)
     }
-
-
 }

@@ -20,10 +20,8 @@ import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.dialogs.NovaCategoriaDialog
 import es.nlc.notorganitapp.fragments.CategoriaConcretaFragment
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
@@ -102,6 +100,9 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
         }
     }
 
+
+    // CREAR CATEGORIA DIALOG
+
     override fun onAddCategory() {
         NovaCategoriaDialog().show(supportFragmentManager,"")
     }
@@ -117,10 +118,12 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
                 val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
                 println(result)
             }catch (e: Exception){
+                println("ERROR: ${e}")
             }
         }
     }
 
+    // OBRIR CATEGORIES I NOTES GENERALS
     override fun onCategories() {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
@@ -137,6 +140,8 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
         }
     }
 
+    // OBRIR CATEGORIA CONCRETA
+
     override fun onCategoriaClicked(categoryName: String) {
         val fragment = CategoriaConcretaFragment().apply {
             arguments = Bundle().apply {
@@ -150,5 +155,22 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
         }
     }
 
+    // BORRAR I EDITAR CATEGORIA
+    override fun onDeleteCategory(categoryName: String) {
+        lifecycleScope.launch(Dispatchers.IO){
+            try {
+                MongoDBDataAPIClient.deleteNotesByCategory("Categoria", "Categories", "Cluster0", categoryName)
+                MongoDBDataAPIClient.deleteCategory("Categoria", "Categories", "Cluster0", categoryName)
+
+            }catch (e: Exception){
+                println("ERROR: ${e}")
+            }
+        }
+
+    }
+
+    override fun onEditCategory(categoryName: String) {
+        TODO("Not yet implemented")
+    }
 
 }

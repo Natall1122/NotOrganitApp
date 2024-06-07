@@ -18,8 +18,7 @@ object MongoDBDataAPIClient {
     private val client = OkHttpClient()
 
     private suspend fun makeRequest(endpoint: String, jsonBody: String): String? {
-        val mediaType = "application/json".toMediaType()
-        val body = jsonBody.toRequestBody(mediaType)
+        val body = jsonBody.toRequestBody()
 
         val request = Request.Builder()
             .url("$BASE_URL/$endpoint")
@@ -45,21 +44,6 @@ object MongoDBDataAPIClient {
                 null
             }
         }
-    }
-
-
-
-    suspend fun findOne(collection: String, database: String, dataSource: String): String? {
-        val jsonBody = """
-            {
-                "collection":"$collection",
-                "database":"$database",
-                "dataSource":"$dataSource",
-                "projection": {"_id": 1}
-            }
-        """.trimIndent()
-
-        return makeRequest("findOne", jsonBody)
     }
 
     suspend fun findMany(collection: String, database: String, dataSource: String): String? {
@@ -100,29 +84,36 @@ object MongoDBDataAPIClient {
 
         Log.d("MongoDBDataAPIClient", "JSON Body: $jsonBody")
 
-        return try {
-            makeRequest("insertOne", jsonBody)
-        } catch (e: IOException) {
-            Log.e("MongoDBDataAPIClient", "Error reading JSON file: ${e.message}")
-            null
-        } catch (e: Exception) {
-            Log.e("MongoDBDataAPIClient", "Error inserting document: ${e.message}")
-            null
-        }
+        return makeRequest("insertOne", jsonBody)
     }
 
-    suspend fun deleteOne(collection: String, database: String, dataSource: String, filter: String): String? {
+    suspend fun deleteCategory(collection: String, database: String, dataSource: String, nomCat: String): String? {
         val jsonBody = """
             {
                 "collection":"$collection",
                 "database":"$database",
                 "dataSource":"$dataSource",
-                "filter": $filter
+                "filter":  {"Nom": "$nomCat"}
             }
         """.trimIndent()
 
         return makeRequest("deleteOne", jsonBody)
     }
+
+    suspend fun deleteNotesByCategory(category: String, collection: String, database: String, dataSource: String): String? {
+        val jsonBody = """
+            {
+                "collection":"$collection",
+                "database":"$database",
+                "dataSource":"$dataSource",
+                "filter": {"categoria": "$category"}
+            }
+        """.trimIndent()
+
+        return makeRequest("deleteMany", jsonBody)
+    }
+
+
 
     suspend fun deleteMany(collection: String, database: String, dataSource: String, filter: String): String? {
         val jsonBody = """
@@ -149,20 +140,6 @@ object MongoDBDataAPIClient {
         """.trimIndent()
 
         return makeRequest("updateOne", jsonBody)
-    }
-
-    suspend fun updateMany(collection: String, database: String, dataSource: String, filter: String, update: String): String? {
-        val jsonBody = """
-            {
-                "collection":"$collection",
-                "database":"$database",
-                "dataSource":"$dataSource",
-                "filter": $filter,
-                "update": $update
-            }
-        """.trimIndent()
-
-        return makeRequest("updateMany", jsonBody)
     }
 }
 
