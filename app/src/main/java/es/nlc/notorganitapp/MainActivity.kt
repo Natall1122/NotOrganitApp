@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
@@ -106,13 +107,10 @@ class MainActivity : AppCompatActivity(), NovaCategoriaDialog.DialogListener, Na
     }
 
     override fun onAddDialogClick(cat: Categories){
-        Toast.makeText(this, "HOLAAA", Toast.LENGTH_SHORT).show()
-        val document = """
-            {
-                "Nom": ${cat.nom}
-                "Color": ${cat.color}
-            }
-        """
+        val document = JSONObject().apply {
+            put("Nom", cat.nom)
+            put("Color", cat.color)
+        }.toString()
 
         lifecycleScope.launch(Dispatchers.IO){
             try {
