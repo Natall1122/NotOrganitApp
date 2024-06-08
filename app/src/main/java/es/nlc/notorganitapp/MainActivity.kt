@@ -30,7 +30,6 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var categoriesAdapter: CateAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_NotOrganitApp)
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, 
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         setUpNavigationDrawer()
+
     }
 
     @SuppressLint("MissingSuperCall")
@@ -105,9 +105,7 @@ class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, 
         }
     }
 
-
     // CREAR CATEGORIA DIALOG
-
     override fun onAddCategory() {
         NovaCategoriaDialog().show(supportFragmentManager,"")
     }
@@ -120,9 +118,8 @@ class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, 
 
         lifecycleScope.launch(Dispatchers.IO){
             try {
-                val result = MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
-                categoriesAdapter.notifyDataSetChanged()
-                println(result)
+                MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
+
             }catch (e: Exception){
                 println("ERROR: ${e}")
             }
@@ -147,7 +144,6 @@ class MainActivity : AppCompatActivity(), UpdateCategoriaDialog.DialogListener, 
     }
 
     // OBRIR CATEGORIA CONCRETA
-
     override fun onCategoriaClicked(categoryName: String) {
         val fragment = CategoriaConcretaFragment().apply {
             arguments = Bundle().apply {

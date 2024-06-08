@@ -56,13 +56,12 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
         }
 
         categoriesAdapter = CategoriesAdapter(requireContext(), categoriesList) { cate ->
-            Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
+            mListener2?.onCategoriaClicked(cate.nom)
         }
         binding.categoriesRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = categoriesAdapter
         }
-
     }
 
     private fun fetchNotesFromDatabase() {
@@ -91,10 +90,12 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
                 for (i in 0 until documentsArray.length()) {
                     val document = documentsArray.getJSONObject(i)
                     val id = document.getString("_id")
-                    val title = document.getString("titol")
-                    val text = document.getString("text")
-                    val categoria = document.getString("categoria")
-                    notesList.add(Notes(id, title, text, categoria))
+                        val title = document.getString("titol")
+                        val text = document.getString("text")
+                        val categoria = document.getString("categoria")
+                    if (!notesList.any { it.id == id }) {
+                        notesList.add(Notes(id, title, text, categoria))
+                    }
                 }
                 notesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
@@ -102,7 +103,6 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
             }
         }
     }
-
 
     private suspend fun parseCategoriesResult(result: String) {
         withContext(Dispatchers.Main) {
@@ -113,7 +113,9 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
                     val document = documentsArray.getJSONObject(i)
                     val nom = document.getString("Nom")
                     val color = document.getString("Color")
-                    categoriesList.add(Categories(nom, color))
+                    if (!categoriesList.any { it.nom == nom }) {
+                        categoriesList.add(Categories(nom, color))
+                    }
                 }
                 categoriesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
@@ -122,19 +124,18 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
         }
     }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if(context is OnPrincipalClickedListener){
+        if (context is OnPrincipalClickedListener) {
             mListener2 = context
-        }else{
+        } else {
             throw Exception("The activity must implement the interface OnButtonsFragmentListener")
         }
     }
 
     override fun onClick(v: View) {
-        when(v.id){
+        when (v.id) {
             R.id.linearCategories -> {
                 mListener2?.onCategories()
             }
@@ -143,13 +144,15 @@ class PrincipalFragment : Fragment(), View.OnClickListener {
             }
         }
     }
+
     override fun onDetach() {
         super.onDetach()
         mListener2 = null
     }
 
-    interface OnPrincipalClickedListener{
+    interface OnPrincipalClickedListener {
         fun onCategories()
         fun onNotes()
+        fun onCategoriaClicked(categoryName: String)
     }
 }

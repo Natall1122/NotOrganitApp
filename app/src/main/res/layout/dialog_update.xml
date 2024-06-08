@@ -46,17 +46,22 @@
             android:inputType="textPersonName"
             android:hint="nom de la categoria" />
 
-        <EditText
-            android:id="@+id/canvi_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textSize="20dp"
-            android:textColor="@color/Obscur"
-            android:textColorHint="@color/Obscur"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="color de la categoria" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/Obscur"
+                android:textAlignment="center"
+                android:text="Tria un color:"/>
+
+
+            <View
+                android:id="@+id/canvi_color"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="@color/Mig"
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
 

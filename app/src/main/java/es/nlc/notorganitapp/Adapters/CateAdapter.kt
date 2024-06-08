@@ -1,11 +1,11 @@
 package es.nlc.notorganitapp.Adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import es.nlc.notorganitapp.R
@@ -15,7 +15,7 @@ class CateAdapter(
     private val context: Context?,
     private val categories: MutableList<Categories>,
     private val mListener: (Categories) -> Unit,
-    private val onMenuClick: (Categories, View) -> Unit // Nou listener amb vista
+    private val onMenuClick: (Categories, View) -> Unit
 ) : RecyclerView.Adapter<CateAdapter.CategoriesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriesViewHolder {
@@ -31,15 +31,24 @@ class CateAdapter(
         val categoria = categories[position]
         holder.bindItem(categoria)
         holder.itemView.setOnClickListener { mListener(categoria) }
-        holder.menuCat.setOnClickListener { onMenuClick(categoria, holder.menuCat) } // Afegir listener amb vista
+        holder.menuCat.setOnClickListener { onMenuClick(categoria, holder.menuCat) }
     }
 
     class CategoriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val nom: TextView = view.findViewById(R.id.NomCate)
-        val menuCat: ImageView = view.findViewById(R.id.menuCat) // Afegir referència a `menuCat`
+        val menuCat: ImageView = view.findViewById(R.id.menuCat)
 
         fun bindItem(e: Categories) {
             nom.text = e.nom
+            try {
+                // Converteix la cadena de color en un color
+                val color = Color.parseColor(e.color)
+                // Estableix el color de fons de la vista de la categoria
+                nom.setBackgroundColor(color)
+            } catch (ex: IllegalArgumentException) {
+                // Maneja la situació en cas que el color no sigui vàlid
+                nom.setBackgroundColor(Color.TRANSPARENT)
+            }
         }
     }
 }

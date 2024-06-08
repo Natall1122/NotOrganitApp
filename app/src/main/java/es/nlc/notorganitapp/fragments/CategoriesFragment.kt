@@ -25,8 +25,8 @@ import org.json.JSONObject
 class CategoriesFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentCategoriesBinding
     private var mListener: OnButtonsClickedListener? = null
-    private lateinit var categoriesAdapter: CateAdapter
-    private val categoriesList: MutableList<Categories> = mutableListOf()
+    lateinit var categoriesAdapter: CateAdapter
+    val categoriesList: MutableList<Categories> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,7 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
     private fun setupRecyclerView() {
         categoriesAdapter = CateAdapter(requireContext(), categoriesList,
             { cate -> mListener?.onCategoriaClicked(cate.nom) },
-            { cate, view -> showOptionsPopup(cate, view) } // Afegeix aquest listener per mostrar el popup
+            { cate, view -> showOptionsPopup(cate, view) }
         )
         binding.CateRec.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -68,7 +68,10 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
                     val document = documentsArray.getJSONObject(i)
                     val nom = document.getString("Nom")
                     val color = document.getString("Color")
-                    categoriesList.add(Categories(nom, color))
+
+                    if (!categoriesList.any { it.nom == nom }) {
+                        categoriesList.add(Categories(nom, color))
+                    }
                 }
                 categoriesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {

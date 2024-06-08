@@ -65,10 +65,12 @@ class GeneralFragment : Fragment() {
                 for (i in 0 until documentsArray.length()) {
                     val document = documentsArray.getJSONObject(i)
                     val id =document.getString("_id")
-                    val titol = document.getString("titol")
-                    val text = document.getString("text")
-                    var categoria = document.getString("categoria")
-                    notesList.add(Notes(id, titol, text, categoria))
+                        val title = document.getString("titol")
+                        val text = document.getString("text")
+                        val categoria = document.getString("categoria")
+                    if (!notesList.any { it.id == id }) {
+                        notesList.add(Notes(id, title, text, categoria))
+                    }
                 }
                 notesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
