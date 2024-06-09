@@ -1,5 +1,6 @@
 package es.nlc.notorganitapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import es.nlc.notorganitapp.Adapters.CateAdapter
 import es.nlc.notorganitapp.Adapters.NotesAdapter
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
+import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentGeneralBinding
@@ -21,18 +23,20 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
-class GeneralFragment : Fragment() {
+class GeneralFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentGeneralBinding
     private lateinit var notesAdapter: NotesAdapter
     private val notesList: MutableList<Notes> = mutableListOf()
+    private var mListener: OnButtonsClickedListener? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentGeneralBinding.inflate(inflater, container, false)
-        //binding.newNot.setOnClickListener(this)
+        binding.newNote.setOnClickListener(this)
         setupRecyclerView()
         fetchNotesFromDatabase()
         return binding.root
@@ -78,4 +82,33 @@ class GeneralFragment : Fragment() {
             }
         }
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is OnButtonsClickedListener) {
+            mListener = context
+        } else {
+            throw Exception("The activity must implement the interface OnButtonsFragmentListener")
+        }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.new_note -> {
+                mListener?.onAddNote()
+            }
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
+    }
+
+    interface OnButtonsClickedListener {
+        fun onAddNote()
+    }
+
+
 }

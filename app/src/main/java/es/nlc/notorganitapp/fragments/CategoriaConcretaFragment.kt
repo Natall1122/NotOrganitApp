@@ -1,5 +1,6 @@
 package es.nlc.notorganitapp.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,19 +21,19 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
-class CategoriaConcretaFragment : Fragment() {
+class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentCategoriaConcretaBinding
     private lateinit var notesAdapter: NotesAdapter
     private val notesList: MutableList<Notes> = mutableListOf()
+    private var mListener: OnButtonsClickedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCategoriaConcretaBinding.inflate(inflater, container, false)
-
+        binding.newNoteC.setOnClickListener(this)
         val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
-
         binding.Titol.text = categoryName.uppercase()
 
         setupRecyclerView()
@@ -70,12 +71,44 @@ class CategoriaConcretaFragment : Fragment() {
                     val titol = document.getString("titol")
                     val text = document.getString("text")
                     val categoria = document.getString("categoria")
-                    notesList.add(Notes(id, titol, text, categoria))
+                    if (!notesList.any { it.id == id }) {
+                        notesList.add(Notes(id, titol, text, categoria))
+                    }
                 }
                 notesAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is OnButtonsClickedListener) {
+            mListener = context
+        } else {
+            throw Exception("The activity must implement the interface OnButtonsFragmentListener")
+        }
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.new_note_C -> {
+                val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
+                mListener?.onAddNoteCategoria(categoryName)
+            }
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
+    }
+
+    interface OnButtonsClickedListener {
+        fun onAddNoteCategoria(NomCategoria: String)
     }
 }
