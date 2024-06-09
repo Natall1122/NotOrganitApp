@@ -12,8 +12,7 @@ import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentNovaNotaBinding
 import org.bson.types.ObjectId
 
-class NovaNotaFragment : Fragment(), View.OnClickListener {
-
+class NovaNotaFragment: Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentNovaNotaBinding
     private var mListener: OnButtonsClickedListener? = null
 
@@ -24,8 +23,10 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
         binding = FragmentNovaNotaBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        binding.cancelar.setOnClickListener(this)
-        binding.guardar.setOnClickListener(this)
+
+        binding.cancelarC.setOnClickListener(this)
+        binding.guardarC.setOnClickListener(this)
+
 
         return binding.root
     }
@@ -34,9 +35,9 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
         (activity as? AppCompatActivity)?.supportActionBar?.show()
     }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
 
         if (context is OnButtonsClickedListener) {
             mListener = context
@@ -45,30 +46,34 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
         }
     }
 
+
     override fun onClick(v: View) {
+        val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
         when (v.id) {
-            R.id.cancelar -> {
-                mListener?.onCancelar()
+            R.id.cancelarC -> {
+                mListener?.onCancelarnotaCategoria(categoryName)
             }
-            R.id.guardar ->{
+            R.id.guardarC ->{
                 val nota = Notes(
-                    titol = binding.TitolNota.text.toString(),
-                    text = binding.text.text.toString(),
-                    categoria = "",
+                    titol = binding.TitolNotaC.text.toString(),
+                    text = binding.textC.text.toString(),
+                    categoria = categoryName,
                     id = ObjectId().toString()
                 )
-                mListener?.onGuardar(nota)
+                mListener?.onGuardarNotaCategoria(nota)
             }
         }
     }
+
 
     override fun onDetach() {
         super.onDetach()
         mListener = null
     }
 
+
     interface OnButtonsClickedListener {
-        fun onCancelar()
-        fun onGuardar(nota: Notes)
+        fun onCancelarnotaCategoria(Categoria: String)
+        fun onGuardarNotaCategoria(nota: Notes)
     }
 }

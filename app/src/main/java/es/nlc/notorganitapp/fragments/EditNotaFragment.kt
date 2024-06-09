@@ -1,38 +1,44 @@
 package es.nlc.notorganitapp.fragments
 
-
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
-import es.nlc.notorganitapp.databinding.FragmentNovaNotaCategoriaBinding
+import es.nlc.notorganitapp.databinding.FragmentEditNotaBinding
 import org.bson.types.ObjectId
 
-
-class NovaNotaCategoriaFragment: Fragment(), View.OnClickListener {
-    private lateinit var binding: FragmentNovaNotaCategoriaBinding
+class EditNotaFragment : Fragment(), View.OnClickListener {
+    private lateinit var binding: FragmentEditNotaBinding
     private var mListener: OnButtonsClickedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentNovaNotaCategoriaBinding.inflate(inflater, container, false)
+        binding = FragmentEditNotaBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
+        // Get the note details from the arguments
+        val titolNota = arguments?.getString("titol") ?: ""
+        val textNota = arguments?.getString("text") ?: ""
 
-        binding.cancelarC.setOnClickListener(this)
-        binding.guardarC.setOnClickListener(this)
+        // Set the text directly
+        binding.Titolnota.setText(titolNota)
+        binding.TextUpdate.setText(textNota)
 
+        // Set click listeners
+        binding.CancelarUpdate.setOnClickListener(this)
+        binding.GuardarUpdate.setOnClickListener(this)
 
         return binding.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as? AppCompatActivity)?.supportActionBar?.show()
@@ -41,7 +47,6 @@ class NovaNotaCategoriaFragment: Fragment(), View.OnClickListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-
         if (context is OnButtonsClickedListener) {
             mListener = context
         } else {
@@ -49,34 +54,33 @@ class NovaNotaCategoriaFragment: Fragment(), View.OnClickListener {
         }
     }
 
-
     override fun onClick(v: View) {
-        val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
+        val categoryName = arguments?.getString("categoria") ?: ""
+        val idNota = arguments?.getString("id") ?: ""
+        val id = idNota
         when (v.id) {
-            R.id.cancelarC -> {
-                mListener?.onCancelarnotaCategoria(categoryName)
+            R.id.CancelarUpdate -> {
+                mListener?.onCancelarUpdate(categoryName)
             }
-            R.id.guardarC ->{
+            R.id.GuardarUpdate -> {
                 val nota = Notes(
-                    titol = binding.TitolNotaC.text.toString(),
-                    text = binding.textC.text.toString(),
-                    categoria = categoryName,
-                    id = ObjectId().toString()
+                    id = id,  // Use the existing id
+                    titol = binding.Titolnota.text.toString(),
+                    text = binding.TextUpdate.text.toString(),
+                    categoria = categoryName
                 )
-                mListener?.onGuardarNotaCategoria(nota)
+                mListener?.onGuardarUpdate(nota, id)
             }
         }
     }
-
 
     override fun onDetach() {
         super.onDetach()
         mListener = null
     }
 
-
     interface OnButtonsClickedListener {
-        fun onCancelarnotaCategoria(Categoria: String)
-        fun onGuardarNotaCategoria(nota: Notes)
+        fun onCancelarUpdate(categoria: String)
+        fun onGuardarUpdate(nota: Notes, id: String)
     }
 }

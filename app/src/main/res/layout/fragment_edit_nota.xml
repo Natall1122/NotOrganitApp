@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.NovaNotaCategoriaFragment">
+    tools:context=".fragments.EditNotaFragment">
 
     <EditText
-        android:id="@+id/TitolNotaC"
+        android:id="@+id/Titolnota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/NotesBar"
@@ -20,7 +20,7 @@
 
 
     <ImageView
-        android:id="@+id/cancelarC"
+        android:id="@+id/CancelarUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -34,7 +34,7 @@
 
 
     <ImageView
-        android:id="@+id/guardarC"
+        android:id="@+id/GuardarUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -58,16 +58,18 @@
 
 
     <EditText
-        android:id="@+id/textC"
+        android:id="@+id/TextUpdate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="45dp"
         android:background="@android:color/transparent"
         android:gravity="top|start"
-        android:hint="Escriu la teva nota aquí..."
+        android:text="Escriu la teva nota aquí..."
+        android:textColorHint="@color/black"
         android:inputType="textMultiLine"
         android:padding="16dp"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/TitolNotaC" />
+        app:layout_constraintTop_toBottomOf="@+id/Titolnota" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

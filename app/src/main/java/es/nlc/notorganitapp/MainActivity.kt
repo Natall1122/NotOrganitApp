@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -23,15 +22,16 @@ import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.dialogs.NovaCategoriaDialog
 import es.nlc.notorganitapp.dialogs.UpdateCategoriaDialog
 import es.nlc.notorganitapp.fragments.CategoriaConcretaFragment
-import es.nlc.notorganitapp.fragments.NovaNotaCategoriaFragment
+import es.nlc.notorganitapp.fragments.EditNotaFragment
 import es.nlc.notorganitapp.fragments.NovaNotaFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.bson.types.ObjectId
 import org.json.JSONObject
 
 
-class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClickedListener, NovaNotaCategoriaFragment.OnButtonsClickedListener, NovaNotaFragment.OnButtonsClickedListener, GeneralFragment.OnButtonsClickedListener, UpdateCategoriaDialog.DialogListener, NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
+class MainActivity : AppCompatActivity(),EditNotaFragment.OnButtonsClickedListener, CategoriaConcretaFragment.OnButtonsClickedListener, NovaNotaFragment.OnButtonsClickedListener, GeneralFragment.OnButtonsClickedListener, UpdateCategoriaDialog.DialogListener, NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +122,11 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
         lifecycleScope.launch(Dispatchers.IO){
             try {
                 MongoDBDataAPIClient.insertOne("Categoria", "Categories", "Cluster0", document)
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<CategoriesFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
 
             }catch (e: Exception){
                 println("ERROR: ${e}")
@@ -166,7 +171,11 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
             try {
                 MongoDBDataAPIClient.deleteNotesByCategory("Categoria", "Categories", "Cluster0", categoryName)
                 MongoDBDataAPIClient.deleteCategory("Categoria", "Categories", "Cluster0", categoryName)
-
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<CategoriesFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
             }catch (e: Exception){
                 println("ERROR: ${e}")
             }
@@ -188,10 +197,16 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
 
             MongoDBDataAPIClient.updateOne("Categoria", "Categories", "Cluster0", filter, update)
             MongoDBDataAPIClient.updateNotesCategoria("Notes", "Categories", "Cluster0", filterNotes, updateNotes)
+
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<CategoriesFragment>(R.id.fragment_container)
+                addToBackStack(null)
+            }
         }
     }
 
-    // AFEGIR NOTES A GENERAL (SENSE CATEGORIA)
+    // AFEGIR NOTES
     override fun onAddNote() {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
@@ -200,40 +215,10 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
         }
     }
 
-    override fun onCancelar() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace<GeneralFragment>(R.id.fragment_container)
-            addToBackStack(null)
-        }
-    }
 
-    override fun onGuardar(nota: Notes) {
-        val document = JSONObject().apply {
-            put("_id", nota.id)
-            put("titol", nota.titol)
-            put("text", nota.text)
-            put("categoria", nota.categoria)
-        }.toString()
-
-        lifecycleScope.launch(Dispatchers.IO){
-            try {
-                MongoDBDataAPIClient.insertOne("Notes", "Categories", "Cluster0", document)
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace<GeneralFragment>(R.id.fragment_container)
-                    addToBackStack(null)
-                }
-            }catch (e: Exception){
-                println("ERROR: ${e}")
-            }
-        }
-    }
-
-    // AFEGIR NOTES A CATEGORIES :)
 
     override fun onAddNoteCategoria(categoryName: String) {
-        val fragment = NovaNotaCategoriaFragment().apply {
+        val fragment = NovaNotaFragment().apply {
             arguments = Bundle().apply {
                 putString("CATEGORY_NAME", categoryName)
             }
@@ -246,15 +231,23 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
     }
 
     override fun onCancelarnotaCategoria(categoryName: String) {
-        val fragment = CategoriaConcretaFragment().apply {
-            arguments = Bundle().apply {
-                putString("CATEGORY_NAME", categoryName)
+        if(categoryName == ""){
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<GeneralFragment>(R.id.fragment_container)
+                addToBackStack(null)
             }
-        }
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragment_container, fragment)
-            addToBackStack(null)
+        }else {
+            val fragment = CategoriaConcretaFragment().apply {
+                arguments = Bundle().apply {
+                    putString("CATEGORY_NAME", categoryName)
+                }
+            }
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.fragment_container, fragment)
+                addToBackStack(null)
+            }
         }
     }
 
@@ -270,6 +263,86 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 MongoDBDataAPIClient.insertOne("Notes", "Categories", "Cluster0", document)
+
+                if(nota.categoria == ""){
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace<GeneralFragment>(R.id.fragment_container)
+                        addToBackStack(null)
+                    }
+                }else {
+                    val fragment = CategoriaConcretaFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("CATEGORY_NAME", nota.categoria)
+                        }
+                    }
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace(R.id.fragment_container, fragment)
+                        addToBackStack(null)
+                    }
+                }
+            } catch (e: Exception) {
+                println("ERROR: ${e}")
+            }
+        }
+    }
+
+    // EDITAR NOTA
+    override fun onEditNoteClicked(id: String, titol: String, text: String, categoria: String) {
+        Toast.makeText(this, titol, Toast.LENGTH_SHORT).show()
+        val fragment = EditNotaFragment().apply {
+            arguments = Bundle().apply {
+                putString("id", id)
+                putString("titol", titol)
+                putString("text", text)
+                putString("categoria", categoria)
+            }
+        }
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragment_container, fragment)
+            addToBackStack(null)
+        }
+
+    }
+
+
+    override fun onCancelarUpdate(Categoria: String) {
+        if(Categoria == ""){
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<GeneralFragment>(R.id.fragment_container)
+                addToBackStack(null)
+            }
+        }else {
+            val fragment = CategoriaConcretaFragment().apply {
+                arguments = Bundle().apply {
+                    putString("CATEGORY_NAME", Categoria)
+                }
+            }
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.fragment_container, fragment)
+                addToBackStack(null)
+            }
+        }
+    }
+
+    override fun onGuardarUpdate(nota: Notes, id: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val filter = """{"_id": "${id}"}"""
+            val update = """{"${'$'}set": {"titol": "${nota.titol}", "text": "${nota.text}"}}"""
+
+            MongoDBDataAPIClient.updateOne("Notes", "Categories", "Cluster0", filter, update)
+
+            if(nota.categoria == ""){
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace<GeneralFragment>(R.id.fragment_container)
+                    addToBackStack(null)
+                }
+            }else {
                 val fragment = CategoriaConcretaFragment().apply {
                     arguments = Bundle().apply {
                         putString("CATEGORY_NAME", nota.categoria)
@@ -280,11 +353,8 @@ class MainActivity : AppCompatActivity(),CategoriaConcretaFragment.OnButtonsClic
                     replace(R.id.fragment_container, fragment)
                     addToBackStack(null)
                 }
-            } catch (e: Exception) {
-                println("ERROR: ${e}")
             }
         }
     }
-
 
 }

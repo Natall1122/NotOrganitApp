@@ -45,7 +45,7 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
 
     private fun setupRecyclerView() {
         notesAdapter = NotesAdapter(requireContext(), notesList) { note ->
-            Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
+            mListener?.onEditNoteClicked(note.id, note.titol, note.text, note.categoria)
         }
         binding.NotesConcretes.apply {
             layoutManager = GridLayoutManager(context, 2)
@@ -143,6 +143,7 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
     }
 
     interface OnButtonsClickedListener {
+        fun onEditNoteClicked(id: String, titol: String, text: String, categoria: String)
         fun onAddNoteCategoria(NomCategoria: String)
     }
 }
