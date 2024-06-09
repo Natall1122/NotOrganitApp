@@ -13,7 +13,6 @@ import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentCategoriaConcretaBinding
-import es.nlc.notorganitapp.databinding.FragmentGeneralBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +32,9 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
     ): View? {
         binding = FragmentCategoriaConcretaBinding.inflate(inflater, container, false)
         binding.newNoteC.setOnClickListener(this)
+        binding.borrarNoteC.setOnClickListener(this)
+        binding.cancelarBorratC.setOnClickListener(this)
+        binding.ContinuarBorratC.setOnClickListener(this)
         val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
         binding.Titol.text = categoryName.uppercase()
 
@@ -42,7 +44,7 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setupRecyclerView() {
-        notesAdapter = NotesAdapter(requireContext(), notesList) { cate ->
+        notesAdapter = NotesAdapter(requireContext(), notesList) { note ->
             Toast.makeText(context, "Categoria", Toast.LENGTH_SHORT).show()
         }
         binding.NotesConcretes.apply {
@@ -80,8 +82,6 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
                 e.printStackTrace()
             }
         }
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -99,6 +99,40 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
             R.id.new_note_C -> {
                 val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
                 mListener?.onAddNoteCategoria(categoryName)
+            }
+            R.id.borrar_note_C -> {
+                notesAdapter.CheckBoxVisible()
+                binding.cancelarBorratC.visibility = View.VISIBLE
+                binding.ContinuarBorratC.visibility = View.VISIBLE
+            }
+            R.id.cancelarBorratC -> {
+                notesAdapter.hideCheckboxes()
+                binding.cancelarBorratC.visibility = View.INVISIBLE
+                binding.ContinuarBorratC.visibility = View.INVISIBLE
+            }
+            R.id.ContinuarBorratC -> {
+                deleteSelectedNotes()
+            }
+        }
+    }
+
+    private fun deleteSelectedNotes() {
+        val selectedNotes = notesAdapter.getSelectedNotes()
+        val ids = selectedNotes.map { it.id }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val filter = JSONObject().put("_id", JSONObject().put("\$in", JSONArray(ids))).toString()
+            val result = MongoDBDataAPIClient.deleteMany("Notes", "Categories", "Cluster0", filter)
+            withContext(Dispatchers.Main) {
+                if (result != null) {
+                    notesList.removeAll(selectedNotes)
+                    notesAdapter.hideCheckboxes()
+                    binding.cancelarBorratC.visibility = View.INVISIBLE
+                    binding.ContinuarBorratC.visibility = View.INVISIBLE
+                    notesAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(context, "Error deleting notes", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

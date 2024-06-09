@@ -4,15 +4,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
 
-class NotesAdapter(private val context: Context?,
-                   private val notes: MutableList<Notes>,
-                   private val mListener: (Notes) -> Unit) :
-    RecyclerView.Adapter<NotesAdapter.EquipViewHolder>(){
+class NotesAdapter(
+    private val context: Context?,
+    private val notes: MutableList<Notes>,
+    private val mListener: (Notes) -> Unit) : RecyclerView.Adapter<NotesAdapter.EquipViewHolder>() {
+
+    private var isCheckboxVisible = false
+    private val selectedNotes = mutableListOf<Notes>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EquipViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.rec_notes, parent, false)
@@ -24,20 +28,47 @@ class NotesAdapter(private val context: Context?,
     }
 
     override fun onBindViewHolder(holder: EquipViewHolder, position: Int) {
-        val jugador = notes[position]
-        holder.bindItem(jugador)
-        holder.itemView.setOnClickListener { mListener(jugador) }
+        val note = notes[position]
+        holder.bindItem(note, isCheckboxVisible, selectedNotes.contains(note))
+        holder.itemView.setOnClickListener { mListener(note) }
+        holder.checkbox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedNotes.add(note)
+            } else {
+                selectedNotes.remove(note)
+            }
+        }
+    }
+
+    fun CheckBoxVisible() {
+        isCheckboxVisible = true
+        selectedNotes.clear()
+        notifyDataSetChanged()
     }
 
 
-    class EquipViewHolder(view: View): RecyclerView.ViewHolder(view){
+    fun hideCheckboxes() {
+        isCheckboxVisible = false
+        selectedNotes.clear()
+        notifyDataSetChanged()
+    }
+
+    fun getSelectedNotes(): List<Notes> {
+        return selectedNotes
+    }
+
+    class EquipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val titol: TextView = view.findViewById(R.id.titol)
         private val text: TextView = view.findViewById(R.id.text)
+        val checkbox: CheckBox = view.findViewById(R.id.borrar)
 
-        fun bindItem(e: Notes){
-            titol.text = e.titol
-            text.text = e.text
-
+        fun bindItem(note: Notes, isCheckboxVisible: Boolean, isSelected: Boolean) {
+            titol.text = note.titol
+            text.text = note.text
+            checkbox.visibility = if (isCheckboxVisible) View.VISIBLE else View.INVISIBLE
+            checkbox.isChecked = isSelected
         }
     }
 }
+
+
