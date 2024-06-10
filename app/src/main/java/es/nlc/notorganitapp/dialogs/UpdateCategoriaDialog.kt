@@ -6,7 +6,9 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import es.nlc.notorganitapp.R
@@ -39,9 +41,11 @@ class UpdateCategoriaDialog(private val Info: Categories) : DialogFragment() {
             val titol = view.findViewById<TextView>(R.id.titolCat)
             val nom = view.findViewById<EditText>(R.id.canvi_nom)
             val colorView = view.findViewById<View>(R.id.canvi_color)
-            
-            selectedColor = Color.parseColor(Info.color)
+            val guardar = view.findViewById<Button>(R.id.guardarCanvi)
+            val cancelar = view.findViewById<ImageView>(R.id.cancelarCanvi)
+            val nomAntic = Info.nom
 
+            selectedColor = Color.parseColor(Info.color)
             titol.text = Info.nom
             nom.setText(Info.nom)
             colorView.setBackgroundColor(selectedColor)
@@ -50,20 +54,19 @@ class UpdateCategoriaDialog(private val Info: Categories) : DialogFragment() {
                 openColorPickerDialogue(colorView)
             }
 
-            val nomAntic = Info.nom
+            guardar.setOnClickListener{
+                val cat = Categories(
+                    nom = nom.text.toString(),
+                    color = String.format("#%06X", 0xFFFFFF and selectedColor)
+                )
+                mListener.onUpdateDialogClick(cat, nomAntic)
+            }
 
-            builder
-                .setView(view)
-                .setPositiveButton("MODIFICAR") { dialog, id ->
-                    val cat = Categories(
-                        nom = nom.text.toString(),
-                        color = String.format("#%06X", 0xFFFFFF and selectedColor)
-                    )
-                    mListener.onUpdateDialogClick(cat, nomAntic)
-                }
-                .setNegativeButton("CANCEL·LAR") { dialog, id ->
-                    dialog.dismiss()
-                }
+            cancelar.setOnClickListener{
+                dismiss()
+            }
+
+            builder.setView(view)
             builder.create()
         } ?: throw IllegalStateException("Activitat No pot ser nula")
     }

@@ -1,6 +1,7 @@
 package es.nlc.notorganitapp.fragments
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -86,6 +87,9 @@ class CategoriesFragment : Fragment(), View.OnClickListener {
 
         val deleteIcon = popupView.findViewById<ImageView>(R.id.delete_icon)
         val editIcon = popupView.findViewById<ImageView>(R.id.edit_icon)
+
+        val color = Color.parseColor(cate.color)
+        popupView.setBackgroundColor(color)
 
         val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 

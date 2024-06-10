@@ -31,17 +31,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/borrar_note_C"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="76dp"
-        android:src="@drawable/delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/colorSecondary" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,33 +57,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/grisC"
-            android:padding="6dp"
+            android:padding="7dp"
             android:src="@drawable/lupa" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/new_note_C"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="44dp"
-        android:src="@drawable/nova"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/colorSecondary" />
 
     <ImageView
         android:id="@+id/filtrar_note_C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:src="@drawable/filter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/colorSecondary" />
 
+    <ImageView
+        android:id="@+id/borrar_note_C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="84dp"
+        android:src="@drawable/delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
+
+    <ImageView
+        android:id="@+id/new_note_C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="52dp"
+        android:src="@drawable/nova"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
 
     <ImageButton
         android:id="@+id/ContinuarBorratC"

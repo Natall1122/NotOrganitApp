@@ -9,20 +9,22 @@
         android:id="@+id/delete_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/delete"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:src="@drawable/delete" />
+
     <ImageView
         android:id="@+id/edit_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/edit"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:src="@drawable/edit" />
+
     <ImageView
         android:id="@+id/lock_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/lock"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:src="@drawable/lock" />
 
 
 </LinearLayout>
