@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Categories
@@ -35,24 +37,30 @@ class NovaCategoriaDialog : DialogFragment() {
             val view = inflater.inflate(R.layout.dialog_add, null)
 
             val colorPreview = view.findViewById<View>(R.id.new_color)
+            val guardar = view.findViewById<Button>(R.id.GuardarCategoria)
+            val cancelar = view.findViewById<ImageView>(R.id.CancelarNovaC)
+            val editText = view.findViewById<EditText>(R.id.new_nom)
+
+            guardar.setOnClickListener {
+                val cat = Categories(
+                    nom = editText.text.toString(),
+                    color = String.format("#%06X", 0xFFFFFF and selectedColor)
+                )
+                mListener.onAddDialogClick(cat)
+                dismiss()
+            }
+
+            cancelar.setOnClickListener{
+               dismiss()
+            }
 
             colorPreview.setOnClickListener {
                 openColorPickerDialogue(colorPreview)
             }
 
-            builder
-                .setView(view)
-                .setPositiveButton("CREAR") { dialog, id ->
-                    val cat = Categories(
-                        nom = view.findViewById<EditText>(R.id.new_nom).text.toString(),
-                        color = String.format("#%06X", 0xFFFFFF and selectedColor)
-                    )
-                    mListener.onAddDialogClick(cat)
-                }
-                .setNegativeButton("CANCEL·LAR") { dialog, id ->
-                    dialog.dismiss()
-                }
+            builder.setView(view)
             builder.create()
+
         } ?: throw IllegalStateException("Activitat No pot ser nula")
     }
 

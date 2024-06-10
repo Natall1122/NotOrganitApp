@@ -22,12 +22,24 @@
             android:layout_margin="35dp"
             >
 
+            <ImageView
+                android:id="@+id/CancelarNovaC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/rounded_border"
+                android:src="@drawable/cancelar"
+                android:padding="8dp"
+                app:tint="@color/Filtres"
+                />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:text="Nova categoria"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="35dp"
             android:textStyle="bold"
             android:textColor="@color/Obscur"
             android:textSize="30dp"
@@ -61,6 +73,18 @@
             android:layout_gravity="center"
             android:background="@color/Mig"
             android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/GuardarCategoria"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/Obscur"
+            android:text="Guardar"
+            android:textColor="@color/Filtres"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            />
 
         </LinearLayout>
 
