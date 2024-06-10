@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity(),EditNotaFragment.OnButtonsClickedListen
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
         setUpNavigationDrawer()
-
     }
 
     @SuppressLint("MissingSuperCall")
@@ -301,7 +300,6 @@ class MainActivity : AppCompatActivity(),EditNotaFragment.OnButtonsClickedListen
 
     // EDITAR NOTA
     override fun onEditNoteClicked(id: String, titol: String, text: String, categoria: String) {
-        Toast.makeText(this, titol, Toast.LENGTH_SHORT).show()
         val fragment = EditNotaFragment().apply {
             arguments = Bundle().apply {
                 putString("id", id)

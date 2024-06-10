@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import es.nlc.notorganitapp.R
+import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentNovaNotaBinding
 import org.bson.types.ObjectId
@@ -23,10 +26,9 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
         binding = FragmentNovaNotaBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-
         binding.cancelarC.setOnClickListener(this)
         binding.guardarC.setOnClickListener(this)
-
+        binding.MenuNotes.setOnClickListener(this)
 
         return binding.root
     }
@@ -62,7 +64,19 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
                 )
                 mListener?.onGuardarNotaCategoria(nota)
             }
+            R.id.MenuNotes ->{
+                showOptionsPopup(v)
+            }
         }
+    }
+
+    private fun showOptionsPopup(anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.opcions_notes, null)
+
+        val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        popupWindow.showAsDropDown(anchorView, 0, 0)
     }
 
 

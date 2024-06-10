@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/NotesConcretes"
         android:layout_width="match_parent"
@@ -34,34 +35,65 @@
         android:id="@+id/borrar_note_C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="76dp"
         android:src="@drawable/delete"
-        android:layout_marginTop="167dp"
-        android:layout_marginEnd="80dp"
-        app:tint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
 
-    <ImageView
-        android:id="@+id/filtrar_note_C"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/filter"
-        android:layout_marginTop="167dp"
-        android:layout_marginEnd="20dp"
-        app:tint="?attr/colorSecondary"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="134dp"
+        android:layout_marginEnd="120dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:background="@color/grisC"
+            android:hint="Buscar"
+            android:textSize="20dp"
+            android:padding="5dp"
+            android:textColor="@color/gris"
+            android:textColorHint="@color/gris" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/grisC"
+            android:padding="6dp"
+            android:src="@drawable/lupa" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/new_note_C"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="44dp"
         android:src="@drawable/nova"
-        android:layout_marginTop="167dp"
-        android:layout_marginEnd="48dp"
-        app:tint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
+
+    <ImageView
+        android:id="@+id/filtrar_note_C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/filter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
 
 
     <ImageButton

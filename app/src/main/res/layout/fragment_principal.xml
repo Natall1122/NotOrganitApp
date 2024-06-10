@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:src="@drawable/cat"
+            android:padding="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorSecondary" />
@@ -43,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" > Categories"
-            android:textSize="17dp" />
+            android:textSize="20dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -72,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:src="@drawable/not"
+            android:padding="2dp"
             app:tint="?attr/colorSecondary" />
 
         <TextView
@@ -80,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:text="> Notes"
-            android:textSize="17dp" />
+            android:textSize="20dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -95,7 +97,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="13dp"
         android:layout_height="60dp"
         android:layout_marginTop="60dp"

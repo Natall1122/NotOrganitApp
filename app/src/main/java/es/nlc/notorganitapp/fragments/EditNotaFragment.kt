@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
@@ -24,17 +25,15 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
         binding = FragmentEditNotaBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        // Get the note details from the arguments
         val titolNota = arguments?.getString("titol") ?: ""
         val textNota = arguments?.getString("text") ?: ""
 
-        // Set the text directly
         binding.Titolnota.setText(titolNota)
         binding.TextUpdate.setText(textNota)
 
-        // Set click listeners
         binding.CancelarUpdate.setOnClickListener(this)
         binding.GuardarUpdate.setOnClickListener(this)
+        binding.MenuEdit.setOnClickListener(this)
 
         return binding.root
     }
@@ -71,7 +70,19 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
                 )
                 mListener?.onGuardarUpdate(nota, id)
             }
+            R.id.MenuEdit -> {
+                showOptionsPopup(v)
+            }
         }
+    }
+
+    private fun showOptionsPopup(anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.opcions_notes, null)
+
+        val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        popupWindow.showAsDropDown(anchorView, 0, 0)
     }
 
     override fun onDetach() {
