@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import es.nlc.notorganitapp.fragments.CategoriesFragment
 import es.nlc.notorganitapp.fragments.GeneralFragment
@@ -34,6 +36,15 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity(),EditNotaFragment.OnButtonsClickedListener, CategoriaConcretaFragment.OnButtonsClickedListener, NovaNotaFragment.OnButtonsClickedListener, GeneralFragment.OnButtonsClickedListener, UpdateCategoriaDialog.DialogListener, NovaCategoriaDialog.DialogListener, NavigationView.OnNavigationItemSelectedListener, PrincipalFragment.OnPrincipalClickedListener ,CategoriesFragment.OnButtonsClickedListener {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val isDarkMode = sharedPreferences.getBoolean("mode", false)
+        val nightMode = if (isDarkMode) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+        AppCompatDelegate.setDefaultNightMode(nightMode)
+
         super.onCreate(savedInstanceState)
         setTheme(R.style.Theme_NotOrganitApp)
         binding = ActivityMainBinding.inflate(layoutInflater)
