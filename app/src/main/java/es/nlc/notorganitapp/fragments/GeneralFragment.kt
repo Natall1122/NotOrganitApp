@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +43,7 @@ class GeneralFragment : Fragment(), View.OnClickListener {
         binding.borrarNote.setOnClickListener(this)
         binding.cancelarBorrat.setOnClickListener(this)
         binding.ContinuarBorrat.setOnClickListener(this)
+        binding.filtrarNote.setOnClickListener(this)
         setupRecyclerView()
         fetchNotesFromDatabase()
         return binding.root
@@ -115,7 +118,27 @@ class GeneralFragment : Fragment(), View.OnClickListener {
             R.id.ContinuarBorrat -> {
                 deleteSelectedNotes()
             }
+            R.id.filtrar_note -> {
+                showOptionsPopup(v)
+            }
         }
+    }
+
+    private fun showOptionsPopup(anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.filtres, null)
+
+        val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        popupView.findViewById<View>(R.id.az).setOnClickListener {
+            notesAdapter.filterNotes("az")
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<View>(R.id.za).setOnClickListener {
+            notesAdapter.filterNotes("za")
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(anchorView, 0, 0)
     }
 
     private fun deleteSelectedNotes() {

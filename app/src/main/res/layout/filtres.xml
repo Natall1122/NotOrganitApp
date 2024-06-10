@@ -3,40 +3,32 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/Mig">
+    android:background="@color/Filtres">
 
     <TextView
+        android:id="@+id/az"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:textColor="@color/black"
-        android:text="Pujar Imatge"
+        android:text="A - Z"
         android:textAlignment="center"
-        android:textSize="18dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
-    <TextView
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:text="Pujar Arxiu"
-        android:textColor="@color/black"
         android:textSize="18dp"
-        android:textAlignment="center"
+        android:textColor="@color/black"
         android:padding="15dp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/black" />
+
     <TextView
+        android:id="@+id/za"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="Protegir Nota"
-        android:textAlignment="center"
-        android:textSize="18dp"
+        android:text="Z - A"
         android:textColor="@color/black"
+        android:textSize="18dp"
+        android:textAlignment="center"
         android:padding="15dp"/>
+
 
 
 </LinearLayout>

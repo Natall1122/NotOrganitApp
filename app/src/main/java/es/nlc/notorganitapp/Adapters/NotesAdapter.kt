@@ -27,6 +27,14 @@ class NotesAdapter(
         return notes.size
     }
 
+    fun filterNotes(criteria: String) {
+        when (criteria) {
+            "az" -> notes.sortBy { it.titol }
+            "za" -> notes.sortByDescending { it.titol }
+        }
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: EquipViewHolder, position: Int) {
         val note = notes[position]
         holder.bindItem(note, isCheckboxVisible, selectedNotes.contains(note))

@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import es.nlc.notorganitapp.Adapters.NotesAdapter
 import es.nlc.notorganitapp.Mongo.MongoDBDataAPIClient
 import es.nlc.notorganitapp.R
+import es.nlc.notorganitapp.clases.Categories
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentCategoriaConcretaBinding
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +38,7 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
         binding.borrarNoteC.setOnClickListener(this)
         binding.cancelarBorratC.setOnClickListener(this)
         binding.ContinuarBorratC.setOnClickListener(this)
+        binding.filtrarNoteC.setOnClickListener(this)
         val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
         binding.Titol.text = categoryName.uppercase()
 
@@ -113,7 +117,27 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
             R.id.ContinuarBorratC -> {
                 deleteSelectedNotes()
             }
+            R.id.filtrar_note_C -> {
+                showOptionsPopup(v)
+            }
         }
+    }
+
+    private fun showOptionsPopup(anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.filtres, null)
+
+        val popupWindow = PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        popupView.findViewById<View>(R.id.az).setOnClickListener {
+            notesAdapter.filterNotes("az")
+            popupWindow.dismiss()
+        }
+        popupView.findViewById<View>(R.id.za).setOnClickListener {
+            notesAdapter.filterNotes("za")
+            popupWindow.dismiss()
+        }
+        popupWindow.showAsDropDown(anchorView, 0, 0)
     }
 
     private fun deleteSelectedNotes() {
