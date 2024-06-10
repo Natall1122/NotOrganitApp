@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentEditNotaBinding
@@ -29,11 +30,16 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
         val textNota = arguments?.getString("text") ?: ""
 
         binding.Titolnota.setText(titolNota)
-        binding.TextUpdate.setText(textNota)
+        binding.TextUpdate.setText(HtmlCompat.fromHtml(textNota, HtmlCompat.FROM_HTML_MODE_COMPACT))
 
         binding.CancelarUpdate.setOnClickListener(this)
         binding.GuardarUpdate.setOnClickListener(this)
         binding.MenuEdit.setOnClickListener(this)
+        binding.NegretaU.setOnClickListener(this)
+        binding.CursivaU.setOnClickListener(this)
+        binding.subratllatU.setOnClickListener(this)
+        binding.augmentarU.setOnClickListener(this)
+        binding.disminuirU.setOnClickListener(this)
 
         return binding.root
     }
@@ -63,15 +69,30 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
             }
             R.id.GuardarUpdate -> {
                 val nota = Notes(
-                    id = id,  // Use the existing id
+                    id = id,
                     titol = binding.Titolnota.text.toString(),
-                    text = binding.TextUpdate.text.toString(),
+                    text = HtmlCompat.toHtml(binding.TextUpdate.text, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
                     categoria = categoryName
                 )
                 mListener?.onGuardarUpdate(nota, id)
             }
             R.id.MenuEdit -> {
                 showOptionsPopup(v)
+            }
+            R.id.NegretaU -> {
+                applyHtmlStyle("b")
+            }
+            R.id.CursivaU -> {
+                applyHtmlStyle("i")
+            }
+            R.id.subratllatU -> {
+                applyHtmlStyle("u")
+            }
+            R.id.augmentarU -> {
+                changeFontSizeHtml(1.5f)
+            }
+            R.id.disminuirU -> {
+                changeFontSizeHtml(0.75f)
             }
         }
     }
@@ -93,5 +114,41 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
     interface OnButtonsClickedListener {
         fun onCancelarUpdate(categoria: String)
         fun onGuardarUpdate(nota: Notes, id: String)
+    }
+
+    private fun applyHtmlStyle(tag: String) {
+        val start = binding.TextUpdate.selectionStart
+        val end = binding.TextUpdate.selectionEnd
+        val textLength = binding.TextUpdate.length()
+
+        if (start < 0 || end <= start || end > textLength) return
+
+        val selectedText = binding.TextUpdate.text.substring(start, end)
+        val newText = "<$tag>$selectedText</$tag>"
+
+        binding.TextUpdate.text.replace(
+            start, end,
+            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
+            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
+        )
+    }
+
+
+
+    private fun changeFontSizeHtml(scaleFactor: Float) {
+        val start = binding.TextUpdate.selectionStart
+        val end = binding.TextUpdate.selectionEnd
+        val textLength = binding.TextUpdate.length()
+
+        if (start < 0 || end <= start || end > textLength) return
+
+        val selectedText = binding.TextUpdate.text.substring(start, end)
+        val newText = "<span style=\"font-size:${scaleFactor}em;\">$selectedText</span>"
+
+        binding.TextUpdate.text.replace(
+            start, end,
+            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
+            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
+        )
     }
 }

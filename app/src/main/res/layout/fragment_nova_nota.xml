@@ -93,18 +93,21 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
+            android:id="@+id/Negreta"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/bold"
             android:padding="2dp"
             android:layout_marginStart="35dp"/>
         <ImageView
+            android:id="@+id/Cursiva"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/italic"
             android:padding="2dp"
             />
         <ImageView
+            android:id="@+id/subratllat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/underline"
@@ -132,11 +135,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/augmentar"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:src="@drawable/fdalt"
                 />
             <ImageView
+                android:id="@+id/disminuir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/fbaix"

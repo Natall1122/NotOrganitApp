@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import es.nlc.notorganitapp.R
 import es.nlc.notorganitapp.clases.Notes
@@ -72,7 +73,7 @@ class NotesAdapter(
 
         fun bindItem(note: Notes, isCheckboxVisible: Boolean, isSelected: Boolean) {
             titol.text = note.titol
-            text.text = note.text
+            text.text = HtmlCompat.fromHtml(note.text, HtmlCompat.FROM_HTML_MODE_COMPACT)
             checkbox.visibility = if (isCheckboxVisible) View.VISIBLE else View.INVISIBLE
             checkbox.isChecked = isSelected
         }

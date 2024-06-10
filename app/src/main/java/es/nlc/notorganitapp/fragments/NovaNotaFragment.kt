@@ -2,6 +2,11 @@ package es.nlc.notorganitapp.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
+import android.text.Spannable
+import android.text.Spanned
+import android.util.Log
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +20,7 @@ import es.nlc.notorganitapp.clases.Notes
 import es.nlc.notorganitapp.databinding.FragmentNovaNotaBinding
 import org.bson.types.ObjectId
 
-class NovaNotaFragment: Fragment(), View.OnClickListener {
+class NovaNotaFragment : Fragment(), View.OnClickListener {
     private lateinit var binding: FragmentNovaNotaBinding
     private var mListener: OnButtonsClickedListener? = null
 
@@ -29,9 +34,15 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
         binding.cancelarC.setOnClickListener(this)
         binding.guardarC.setOnClickListener(this)
         binding.MenuNotes.setOnClickListener(this)
+        binding.Negreta.setOnClickListener(this)
+        binding.Cursiva.setOnClickListener(this)
+        binding.subratllat.setOnClickListener(this)
+        binding.augmentar.setOnClickListener(this)
+        binding.disminuir.setOnClickListener(this)
 
         return binding.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as? AppCompatActivity)?.supportActionBar?.show()
@@ -40,7 +51,6 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-
         if (context is OnButtonsClickedListener) {
             mListener = context
         } else {
@@ -48,24 +58,38 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
         }
     }
 
-
     override fun onClick(v: View) {
         val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
         when (v.id) {
             R.id.cancelarC -> {
                 mListener?.onCancelarnotaCategoria(categoryName)
             }
-            R.id.guardarC ->{
+            R.id.guardarC -> {
                 val nota = Notes(
                     titol = binding.TitolNotaC.text.toString(),
-                    text = binding.textC.text.toString(),
+                    text = HtmlCompat.toHtml(binding.textC.text as Spanned, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
                     categoria = categoryName,
                     id = ObjectId().toString()
                 )
                 mListener?.onGuardarNotaCategoria(nota)
             }
-            R.id.MenuNotes ->{
+            R.id.MenuNotes -> {
                 showOptionsPopup(v)
+            }
+            R.id.Negreta -> {
+                applyHtmlStyle("b")
+            }
+            R.id.Cursiva -> {
+                applyHtmlStyle("i")
+            }
+            R.id.subratllat -> {
+                applyHtmlStyle("u")
+            }
+            R.id.augmentar -> {
+                changeFontSizeHtml(1.5f)
+            }
+            R.id.disminuir -> {
+                changeFontSizeHtml(0.75f)
             }
         }
     }
@@ -79,15 +103,51 @@ class NovaNotaFragment: Fragment(), View.OnClickListener {
         popupWindow.showAsDropDown(anchorView, 0, 0)
     }
 
-
     override fun onDetach() {
         super.onDetach()
         mListener = null
     }
 
-
     interface OnButtonsClickedListener {
         fun onCancelarnotaCategoria(Categoria: String)
         fun onGuardarNotaCategoria(nota: Notes)
     }
+
+    private fun applyHtmlStyle(tag: String) {
+        val start = binding.textC.selectionStart
+        val end = binding.textC.selectionEnd
+        val textLength = binding.textC.length()
+
+        if (start < 0 || end <= start || end > textLength) return
+
+        val selectedText = binding.textC.text.substring(start, end)
+        val newText = "<$tag>$selectedText</$tag>"
+
+        binding.textC.text.replace(
+            start, end,
+            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
+            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
+        )
+    }
+
+
+
+    private fun changeFontSizeHtml(scaleFactor: Float) {
+        val start = binding.textC.selectionStart
+        val end = binding.textC.selectionEnd
+        val textLength = binding.textC.length()
+
+        if (start < 0 || end <= start || end > textLength) return
+
+        val selectedText = binding.textC.text.substring(start, end)
+        val newText = "<span style=\"font-size:${scaleFactor}em;\">$selectedText</span>"
+
+        binding.textC.text.replace(
+            start, end,
+            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
+            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
+        )
+    }
+
+
 }
