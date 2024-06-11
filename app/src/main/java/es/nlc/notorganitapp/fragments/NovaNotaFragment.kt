@@ -37,8 +37,6 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
         binding.Negreta.setOnClickListener(this)
         binding.Cursiva.setOnClickListener(this)
         binding.subratllat.setOnClickListener(this)
-        binding.augmentar.setOnClickListener(this)
-        binding.disminuir.setOnClickListener(this)
 
         return binding.root
     }
@@ -85,12 +83,6 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
             R.id.subratllat -> {
                 applyHtmlStyle("u")
             }
-            R.id.augmentar -> {
-                changeFontSizeHtml(1.5f)
-            }
-            R.id.disminuir -> {
-                changeFontSizeHtml(0.75f)
-            }
         }
     }
 
@@ -129,25 +121,4 @@ class NovaNotaFragment : Fragment(), View.OnClickListener {
             0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
         )
     }
-
-
-
-    private fun changeFontSizeHtml(scaleFactor: Float) {
-        val start = binding.textC.selectionStart
-        val end = binding.textC.selectionEnd
-        val textLength = binding.textC.length()
-
-        if (start < 0 || end <= start || end > textLength) return
-
-        val selectedText = binding.textC.text.substring(start, end)
-        val newText = "<span style=\"font-size:${scaleFactor}em;\">$selectedText</span>"
-
-        binding.textC.text.replace(
-            start, end,
-            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
-            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
-        )
-    }
-
-
 }

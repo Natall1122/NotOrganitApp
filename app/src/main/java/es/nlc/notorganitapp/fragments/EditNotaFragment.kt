@@ -39,8 +39,6 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
         binding.NegretaU.setOnClickListener(this)
         binding.CursivaU.setOnClickListener(this)
         binding.subratllatU.setOnClickListener(this)
-        binding.augmentarU.setOnClickListener(this)
-        binding.disminuirU.setOnClickListener(this)
 
         return binding.root
     }
@@ -89,12 +87,6 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
             R.id.subratllatU -> {
                 applyHtmlStyle("u")
             }
-            R.id.augmentarU -> {
-                changeFontSizeHtml(1.5f)
-            }
-            R.id.disminuirU -> {
-                changeFontSizeHtml(0.75f)
-            }
         }
     }
 
@@ -126,25 +118,6 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
 
         val selectedText = binding.TextUpdate.text.substring(start, end)
         val newText = "<$tag>$selectedText</$tag>"
-
-        binding.TextUpdate.text.replace(
-            start, end,
-            HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT),
-            0, HtmlCompat.fromHtml(newText, HtmlCompat.FROM_HTML_MODE_COMPACT).length
-        )
-    }
-
-
-
-    private fun changeFontSizeHtml(scaleFactor: Float) {
-        val start = binding.TextUpdate.selectionStart
-        val end = binding.TextUpdate.selectionEnd
-        val textLength = binding.TextUpdate.length()
-
-        if (start < 0 || end <= start || end > textLength) return
-
-        val selectedText = binding.TextUpdate.text.substring(start, end)
-        val newText = "<span style=\"font-size:${scaleFactor}em;\">$selectedText</span>"
 
         binding.TextUpdate.text.replace(
             start, end,
