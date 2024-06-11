@@ -32,6 +32,7 @@
                 android:src="@drawable/cancelar"
                 android:padding="8dp"
                 app:tint="@color/Filtres"
+                android:layout_gravity="right"
                 />
 
         <TextView

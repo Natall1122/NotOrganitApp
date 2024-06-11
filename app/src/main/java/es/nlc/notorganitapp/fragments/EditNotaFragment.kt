@@ -2,6 +2,7 @@ package es.nlc.notorganitapp.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Spanned
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -71,7 +72,7 @@ class EditNotaFragment : Fragment(), View.OnClickListener {
                 val nota = Notes(
                     id = id,
                     titol = binding.Titolnota.text.toString(),
-                    text = HtmlCompat.toHtml(binding.TextUpdate.text, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE),
+                    text = HtmlCompat.toHtml(binding.TextUpdate.text as Spanned, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).replace("\"", "\\\"").replace("\n", ""),
                     categoria = categoryName
                 )
                 mListener?.onGuardarUpdate(nota, id)
