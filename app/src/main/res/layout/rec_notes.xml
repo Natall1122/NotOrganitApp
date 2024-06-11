@@ -40,6 +40,8 @@
                 android:text="Ací apareixeria el text:"
                 android:textColor="@color/Obscur"
                 android:textSize="17dp"
+                android:maxLines="3"
+                android:ellipsize="end"
                 tools:layout_editor_absoluteX="18dp"
                 tools:layout_editor_absoluteY="53dp" />
 
