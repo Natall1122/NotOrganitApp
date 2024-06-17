@@ -55,6 +55,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
+            android:id="@+id/buscar"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@color/grisC"

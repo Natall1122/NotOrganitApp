@@ -44,6 +44,7 @@ class GeneralFragment : Fragment(), View.OnClickListener {
         binding.cancelarBorrat.setOnClickListener(this)
         binding.ContinuarBorrat.setOnClickListener(this)
         binding.filtrarNote.setOnClickListener(this)
+        binding.buscar.isEnabled = false
         setupRecyclerView()
         fetchNotesFromDatabase()
         return binding.root

@@ -29,10 +29,6 @@ object MongoDBDataAPIClient {
             .addHeader("Access-Control-Request-Headers", "*")
             .build()
 
-        Log.d("MongoDBDataAPIClient", "Request URL: ${request.url}")
-        Log.d("MongoDBDataAPIClient", "Request Headers: ${request.headers}")
-        Log.d("MongoDBDataAPIClient", "Request Body: $jsonBody")
-
         return withContext(Dispatchers.IO) {
             val response = client.newCall(request).execute()
             val responseBody = response.body?.string()

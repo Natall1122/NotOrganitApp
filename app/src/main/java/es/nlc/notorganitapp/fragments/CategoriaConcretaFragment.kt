@@ -39,6 +39,7 @@ class CategoriaConcretaFragment : Fragment(), View.OnClickListener {
         binding.cancelarBorratC.setOnClickListener(this)
         binding.ContinuarBorratC.setOnClickListener(this)
         binding.filtrarNoteC.setOnClickListener(this)
+        binding.buscarC.isEnabled = false
         val categoryName = arguments?.getString("CATEGORY_NAME") ?: ""
         binding.Titol.text = categoryName.uppercase()
 
